@@ -2,6 +2,9 @@
     "name": "relylabs-assignment",
     "version": "1.0.0",
     "description": "Simple login logot application",
+    "engines": {
+        "node": "14.x"
+    },
     "main": "server.js",
     "scripts": {
         "start": "node backend/server",
