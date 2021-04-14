@@ -31,7 +31,7 @@ const reducer = (state = initialState, action) => {
     case USER_LOGIN_FAIL:
       return { ...state, loading: false, error: action.payload };
     case USER_LOGOUT:
-      return { ...state, userInfo: {} };
+      return {};
     default:
       return state;
   }
@@ -67,6 +67,7 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
+  dispatch({ type: USER_REGISTER_REQUEST });
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
   document.location.href = "/login";
