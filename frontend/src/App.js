@@ -16,7 +16,7 @@ const App = () => {
         <Container>
           <Route exact path="/login" component={LoginScreen} />
           <Route exact path="/register" component={RegisterScreen} />
-          <Route exact path="/register" component={Dashboard} />
+          <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/" component={Dashboard} />
         </Container>
       </main>

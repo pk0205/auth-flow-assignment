@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 
@@ -6,11 +9,17 @@ import Message from "./Message";
 import Loader from "./Loader";
 import FormContainer from "./FormContainer";
 
+import { login } from "./redux";
+
 const LoginScreen = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const userInfo = localStorage.getItem("userInfo");
+  const dispatch = useDispatch();
+
+  const userInfo = useSelector((state) => state.userInfo);
+  const loading = useSelector((state) => state.loading);
+  const error = useSelector((state) => state.error);
 
   useEffect(() => {
     if (userInfo) {
@@ -18,16 +27,17 @@ const LoginScreen = ({ history }) => {
     }
   }, [history, userInfo]);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+    dispatch(login(email, password));
   };
 
   return (
     <>
       <FormContainer>
         <h1>Sign In</h1>
-        {/* {error && <Message variant="danger">{error}</Message>} */}
-        {/* {loading && <Loader />} */}
+        {error && <Message>{error}</Message>}
+        {loading && <Loader />}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId="email">
             <Form.Label>Email Address</Form.Label>

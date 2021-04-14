@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import Message from "./Message";
 import Loader from "./Loader";
 import FormContainer from "./FormContainer";
 
-const RegisterScreen = ({ location, history }) => {
+import { register } from "./redux";
+
+const RegisterScreen = ({ history }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
 
-  const userInfo = localStorage.getItem("userInfo");
+  const dispatch = useDispatch();
+
+  const userInfo = useSelector((state) => state.userInfo);
+  const loading = useSelector((state) => state.loading);
+  const error = useSelector((state) => state.error);
 
   useEffect(() => {
     if (userInfo) {
@@ -20,12 +29,13 @@ const RegisterScreen = ({ location, history }) => {
     }
   }, [history, userInfo]);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
     } else {
       setMessage("");
+      dispatch(register(name, email, password));
     }
   };
 
@@ -34,8 +44,8 @@ const RegisterScreen = ({ location, history }) => {
       <FormContainer>
         <h1>Sign Up</h1>
         {message && <Message variant="danger">{message}</Message>}
-        {/* {error && <Message variant="danger">{error}</Message>}
-        {loading && <Loader />} */}
+        {error && <Message variant="danger">{error}</Message>}
+        {loading && <Loader />}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId="name">
             <Form.Label>Name</Form.Label>
@@ -66,6 +76,7 @@ const RegisterScreen = ({ location, history }) => {
               required
               placeholder="Enter password"
               value={password}
+              minLength="6"
               onChange={(e) => setPassword(e.target.value)}
             ></Form.Control>
           </Form.Group>
